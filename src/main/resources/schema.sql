@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS meeting_room (
 );
 
 CREATE TABLE IF NOT EXISTS reservable_room (
-  reserved_date DATA NOT NULL,
+  reserved_date DATE NOT NULL,
   room_id INT4 NOT NULL,
   PRIMARY KEY (reserved_date, room_id)
 );
