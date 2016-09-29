@@ -1,8 +1,6 @@
 package com.domain.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,8 +10,6 @@ import java.io.Serializable;
  */
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class ReservableRoom implements Serializable {
     @EmbeddedId
     private ReservableRoomId reservableRoomId;
@@ -23,10 +19,10 @@ public class ReservableRoom implements Serializable {
     @MapsId("roomId")
     private MeetingRoom meetingRoom;
 
-//    public ReservableRoom(ReservableRoomId reservationRoomId) {
-//        this.reservableRoomId = reservationRoomId;
-//    }
-//
-//    public ReservableRoom() {
-//    }
+    public ReservableRoom(ReservableRoomId reservationRoomId) {
+        this.reservableRoomId = reservationRoomId;
+    }
+
+    public ReservableRoom() {
+    }
 }
