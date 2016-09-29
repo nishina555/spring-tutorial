@@ -12,9 +12,9 @@ import java.time.LocalDate;
  * Created by nishina on 2016/09/27.
  */
 @Data
+@Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
-@Embeddable
 public class ReservableRoomId implements Serializable {
 
     private Integer roomId;
