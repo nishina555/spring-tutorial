@@ -5,8 +5,11 @@ import com.domain.service.reservation.AlreadyReservedException;
 import com.domain.service.reservation.ReservationService;
 import com.domain.service.reservation.UnavailableReservationException;
 import com.domain.service.room.RoomService;
+import com.domain.service.user.ReservationUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -52,12 +55,13 @@ public class ReservationsController {
         model.addAttribute("room", roomService.findMeetingRoom(roomId));
         model.addAttribute("reservations", reservations);
         model.addAttribute("timeList", timeList);
-        model.addAttribute("user", dummyUser());
+//        model.addAttribute("user", dummyUser());
         return "reservation/reserveForm";
     }
 
     @PostMapping
     String reserve(@Validated ReservationForm form, BindingResult bindingResult,
+                   @AuthenticationPrincipal ReservationUserDetails userDetails,
                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
                    @PathVariable("roomId") Integer roomId, Model model) {
         if (bindingResult.hasErrors()) {
@@ -70,7 +74,8 @@ public class ReservationsController {
         reservation.setStartTime(form.getStartTime());
         reservation.setEndTime(form.getEndTime());
         reservation.setReservableRoom(reservableRoom);
-        reservation.setUser(dummyUser());
+//        reservation.setUser(dummyUser());
+        reservation.setUser(userDetails.getUser());
 
         try {
             reservationService.reserve(reservation);
@@ -83,15 +88,18 @@ public class ReservationsController {
     }
 
     @PostMapping(params = "cancel")
-    String cancel(@RequestParam("reservationId") Integer reservationId,
+    String cancel(@AuthenticationPrincipal ReservationUserDetails userDetails,
+                  @RequestParam("reservationId") Integer reservationId,
                   @PathVariable("roomId") Integer roomId,
                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
                   Model model) {
-        User user = dummyUser();
+//        User user = dummyUser();
+        User user = userDetails.getUser();
         try {
             reservationService.cancel(reservationId, user);
         }
-        catch (IllegalStateException e) {
+//        catch (IllegalStateException e) {
+        catch (AccessDeniedException e) {
             model.addAttribute("error", e.getMessage());
             return reserveForm(date, roomId, model);
         }
