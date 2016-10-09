@@ -1,3 +1,8 @@
+## Overview
+Spring徹底入門の練習用リポジトリになります。  
+著者によるサンプルコードは[こちら](https://github.com/making/mrs)
+
+
 ## Set up postgres
 
 ```
@@ -28,4 +33,3 @@ LC_CTYPE = 'C'
 TEMPLATE = 'template0'
 CONNECTION LIMIT = -1;
 ```
-
